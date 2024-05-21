@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -48,13 +48,25 @@ export default function BasketPage() {
         {basket.map((book, index) => (
           <div key={book.isbn} className="flex items-center gap-4 border-b pb-4">
             <span>{index + 1}</span>
-            <Image
-              src={'/book2.jpg'}
-              alt={book.title}
-              width={80}
-              height={120}
-              className="w-20 h-30 object-cover"
-            />
+            <Suspense
+              fallback={
+                <Image
+                  src={'/book2.jpg'}
+                  alt={book.title}
+                  width={80}
+                  height={120}
+                  className="w-20 h-30 object-cover"
+                />
+              }
+            >
+              <Image
+                src={book.thumbnailUrl}
+                alt={book.title}
+                width={80}
+                height={120}
+                className="w-20 h-30 object-cover"
+              />
+            </Suspense>
             <div className="flex-grow">
               <h2 className="text-lg font-bold">{book.title}</h2>
               <p className="text-sm text-zinc-800">Авторы: {book.authors.join(', ')}</p>
