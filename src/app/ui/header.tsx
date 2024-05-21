@@ -2,11 +2,13 @@
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { redirect, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Header() {
   const [basketCount, setBasketCount] = useState(0);
   const [title, setTitle] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const storedBasket = JSON.parse(localStorage.getItem('basket') || '[]');
@@ -28,10 +30,17 @@ export default function Header() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              const linkHref = title != '' ? `/books?title=${title}` : '/books';
+              router.push(linkHref);
+            }
+          }}
           className="w-full px-3 py-1 rounded outline-none"
         />
         <Link
-          href={`/books?title=${title}`}
+          href={title != '' ? `/books?title=${title}` : '/books'}
           className="bg-yellow-400 p-1.5 rounded cursor-pointer transition-colors duration-150 active:bg-yellow-500"
         >
           <MagnifyingGlassIcon className="w-5 text-white" />
