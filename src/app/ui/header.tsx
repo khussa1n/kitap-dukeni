@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 export default function Header() {
   const [basketCount, setBasketCount] = useState(0);
+  const [title, setTitle] = useState('');
 
   useEffect(() => {
     const storedBasket = JSON.parse(localStorage.getItem('basket') || '[]');
@@ -22,10 +23,19 @@ export default function Header() {
         <span className="-mt-3">дүкені</span>
       </Link>
       <div className="w-full max-w-xl flex items-center p-0.5 bg-white rounded">
-        <input placeholder="Іздеу" className="w-full px-3 py-1 rounded outline-none" />
-        <div className="bg-yellow-400 p-1.5 rounded cursor-pointer transition-colors duration-150 active:bg-yellow-500">
+        <input
+          placeholder="Іздеу"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+          className="w-full px-3 py-1 rounded outline-none"
+        />
+        <Link
+          href={`/books?title=${title}`}
+          className="bg-yellow-400 p-1.5 rounded cursor-pointer transition-colors duration-150 active:bg-yellow-500"
+        >
           <MagnifyingGlassIcon className="w-5 text-white" />
-        </div>
+        </Link>
       </div>
       <div className="flex gap-1">
         <div className="bg-slate-800 p-2 text-white text-sm rounded cursor-pointer transition-colors duration-150 active:bg-slate-900">

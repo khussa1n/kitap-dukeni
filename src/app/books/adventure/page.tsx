@@ -1,5 +1,4 @@
 import { adventureBooks } from '@/app/lib/data/adventureBooks';
-import { programmingBooks } from '@/app/lib/data/programmingBooks';
 import Book from '@/app/ui/book';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
