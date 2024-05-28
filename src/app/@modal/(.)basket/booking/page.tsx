@@ -57,6 +57,7 @@ export default function Page() {
         />
         <div className="flex justify-end gap-4">
           <button
+            type="button"
             onClick={() => (window.location.href = '/basket')}
             className="py-2 px-4 rounded bg-gray-500 text-white"
           >
