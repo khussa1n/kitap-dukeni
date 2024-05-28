@@ -9,8 +9,16 @@ type props = {
   };
 };
 
+type Comment = {
+  rating: number;
+  text: string;
+};
+
 export default function Page({ params }: props) {
   const [book, setBook] = useState<Book | null>(null);
+  const [rating, setRating] = useState(0);
+  const [commentText, setCommentText] = useState('');
+  const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -21,9 +29,13 @@ export default function Page({ params }: props) {
       if (parsedBook.isbn === params.id) {
         setBook(parsedBook);
       } else {
-        // Handle the case where the book ID in params doesn't match the stored book
         console.warn('Book ID does not match the stored book');
       }
+    }
+
+    const storedComments = localStorage.getItem(`comments_${params.id}`);
+    if (storedComments) {
+      setComments(JSON.parse(storedComments));
     }
   }, [params.id]);
 
@@ -44,6 +56,29 @@ export default function Page({ params }: props) {
     basket.push(book);
     localStorage.setItem('basket', JSON.stringify(basket));
     alert('Кітап себетке қосылды');
+  };
+
+  const handleRating = (index: number) => {
+    setRating(index + 1);
+  };
+
+  const handleCommentSubmit = () => {
+    if (rating === 0 || commentText.trim() === '') {
+      alert('Өтінеміз, бағаны және пікірді толтырыңыз.');
+      return;
+    }
+
+    const newComment: Comment = {
+      rating,
+      text: commentText,
+    };
+
+    const updatedComments = [...comments, newComment];
+    setComments(updatedComments);
+    localStorage.setItem(`comments_${params.id}`, JSON.stringify(updatedComments));
+
+    setRating(0);
+    setCommentText('');
   };
 
   return (
@@ -108,7 +143,10 @@ export default function Page({ params }: props) {
             {[...Array(5)].map((_, i) => (
               <svg
                 key={i}
-                className="w-6 h-6 text-yellow-400"
+                onClick={() => handleRating(i)}
+                className={`w-6 h-6 cursor-pointer ${
+                  i < rating ? 'text-yellow-400' : 'text-gray-300'
+                }`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -119,9 +157,35 @@ export default function Page({ params }: props) {
           <textarea
             className="border border-gray-300 rounded p-2 w-full h-28 outline-none"
             placeholder="Пікіріңізді жазыңыз"
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
           ></textarea>
         </div>
-        <button className="mt-2 py-1 px-4 rounded bg-yellow-400 text-white">Жіберу</button>
+        <button
+          onClick={handleCommentSubmit}
+          className="mt-2 py-1 px-4 rounded bg-yellow-400 text-white"
+        >
+          Жіберу
+        </button>
+      </div>
+      <div className="mt-8">
+        {comments.map((comment, index) => (
+          <div key={index} className="flex flex-col gap-2 mb-4 border-b pb-4">
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className={`w-6 h-6 ${i < comment.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927C9.277 2.599 9.723 2.599 9.951 2.927l2.141 3.328 3.804.61c.38.061.531.522.257.789l-2.729 2.724.646 3.982c.068.42-.361.741-.743.54L10 14.414l-3.327 1.736c-.382.2-.811-.12-.743-.54l.646-3.982-2.729-2.724c-.274-.267-.123-.728.257-.789l3.804-.61 2.141-3.328z" />
+                </svg>
+              ))}
+            </div>
+            <p className="text-zinc-600">{comment.text}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

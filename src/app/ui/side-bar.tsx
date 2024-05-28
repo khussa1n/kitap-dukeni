@@ -4,7 +4,7 @@ export default function SideBar() {
   const sections = [
     { id: '/books/programming', label: 'Бағдарламалау' },
     { id: '/books/adventure', label: 'Шытырман оқиға' },
-    { id: '/books/romance', label: 'Раман' },
+    { id: '/books/romance', label: 'Роман' },
     { id: '/books/fantasy', label: 'Қиял' },
     { id: '/books/historical', label: 'Тарих' },
     { id: '/books/horror', label: 'Сұмдық' },

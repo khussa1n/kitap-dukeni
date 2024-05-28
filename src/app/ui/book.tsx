@@ -19,7 +19,7 @@ export default function Book({ book }: { book: Book }) {
       alert('Кітап қазірдің өзінде себетте');
       return;
     }
-    basket.push(book);
+    basket.push({ ...book, quantity: 1 });
     localStorage.setItem('basket', JSON.stringify(basket));
     alert('Кітап себетке қосылды');
   };
@@ -27,7 +27,7 @@ export default function Book({ book }: { book: Book }) {
   return (
     <div
       onClick={handleLinkClick}
-      className="m-2 w-fit flex flex-col gap-2 justify-center items-center cursor-pointer"
+      className="p-2 flex flex-col w-60 truncate gap-2 justify-center items-center cursor-pointer hover:bg-slate-200 transition-colors duration-200 hover:shadow-xl"
     >
       <Suspense
         fallback={
@@ -51,12 +51,8 @@ export default function Book({ book }: { book: Book }) {
         />
       </Suspense>
       <div className="flex flex-col gap-0.5 justify-center items-center">
-        <span className="text-sky-600">{book.title}</span>
-        <div className="text-sky-600 flex gap-1">
-          {book.authors.map((author, i) => (
-            <span key={i}>{author}</span>
-          ))}
-        </div>
+        <p className="text-sky-600 line-clamp-1 w-60 text-center truncate">{book.title}</p>
+        <div className="text-sky-600 flex gap-1 truncate">{book.authors[0]}</div>
         <span className="text-orange-600">
           {book.value} <span>&#8376;</span>
         </span>

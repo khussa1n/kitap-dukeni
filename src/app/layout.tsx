@@ -12,12 +12,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html>
       <body className="w-full h-full min-h-screen max-w-[2000px] flex flex-col justify-between mx-auto">
+        {modal}
         <div className="w-full">
           <Header />
           <Sections />
