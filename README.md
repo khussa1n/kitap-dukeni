@@ -1,11 +1,5 @@
 # Онлайн оқулық сатылым жүйесі
 
-## Қолданылған құралдар:
-
-- Next.js
-- TypeScript
-- Tailwind CSS
-
 ## Getting Started
 
 First, run the development server:
